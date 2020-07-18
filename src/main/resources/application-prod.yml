@@ -1,0 +1,83 @@
+server:
+  port: 8080
+  servlet:
+#    context-path: /security
+    encoding:
+      charset: UTF-8
+      force: true
+
+
+spring:
+  config:
+    name: prod
+  main:
+    banner-mode: off
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/security?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: kanade
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 3
+      min-idle: 3
+      max-active: 10
+      # 测试连接
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 获取连接等待超时的时间
+      max-wait: 60000
+      validation-query: select 1 from dual
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存时间
+      min-evictable-idle-time-millis: 300000
+
+  redis:
+    # 使用的数据库索引
+    host: 127.0.0.1
+    port: 6379
+    password: kanade
+    # 连接超时时间（毫秒）
+    timeout: 60000
+    jedis:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 40
+        # 连接池最大阻塞等待时间（毫秒，使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 20
+        # 连接池中的最小空闲连接
+        min-idle: 10
+
+
+mybatis-plus:
+  # mapper.xml文件扫描地址
+  mapper-locations: classpath:/mappers/*.xml
+  global-config:
+    banner: off
+    db-config:
+      # 自增
+      id-type: auto
+      # 大写转下划线
+      table-underline: true
+      # 插入以及更新策略
+      insert-strategy: not_null
+      update-strategy: not_null
+  configuration:
+    # 数据库字段自动转成实体类字段
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+
+logging:
+  config: classpath:log4j2-prod.xml
+  level:
+    root: INFO
